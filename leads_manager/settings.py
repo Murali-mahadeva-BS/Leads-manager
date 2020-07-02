@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'leads.apps.LeadsConfig',  # leads app
+    'frontend.apps.FrontendConfig',  # frontend app that holds react
     'rest_framework',  # rest framework
 ]
 
