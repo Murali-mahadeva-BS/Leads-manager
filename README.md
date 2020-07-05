@@ -1,6 +1,7 @@
 # Leads-manager
 ### Django and react application 
-<br>
+managing(Create, Retrive, Delete) leads with authentication feature
+
 #### Dependencies used:
 
 ##### Backend:
