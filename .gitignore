@@ -48,7 +48,6 @@ spritesmith.scss
 tmp_email/
 
 # vs code
-.vscode
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
