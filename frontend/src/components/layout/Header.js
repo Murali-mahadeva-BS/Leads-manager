@@ -1,43 +1,68 @@
-import React, { Component } from "react";
+import React, { Fragment } from "react";
+import { Link, Redirect } from "react-router-dom";
+import { connect } from "react-redux";
+import { logout } from "../../redux/actions";
 
-class Header extends Component {
-  render() {
-    return (
-      <React.Fragment>
-        <nav className="navbar navbar-expand-sm  bg-light">
-          <a className="navbar-brand" href="#">
-            Mylists
-          </a>
-          <button
-            className="navbar-toggler"
-            type="button"
-            data-toggle="collapse"
-            data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span className="navbar-toggler-icon"></span>
-          </button>
+function Header({ auth, logout }) {
+  const authenticatedLink = (
+    <ul className="navbar-nav mt-2 m-2">
+      {auth.isAuthenticated && (
+        <li className="nav-item text-info">User: {auth.user.username}</li>
+      )}
+      <li className="nav-item ml-4">
+        <button
+          onClick={() => {
+            logout();
+            window.location.reload();
+          }}
+          className="btn btn-outline-primary"
+        >
+          Logout
+        </button>
+      </li>
+    </ul>
+  );
 
-          <div className="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul className="navbar-nav mr-auto">
-              <li className="nav-item active">
-                <a className="nav-link" href="#">
-                  Home <span className="sr-only">(current)</span>
-                </a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" href="#">
-                  Link
-                </a>
-              </li>
-            </ul>
-          </div>
-        </nav>
-      </React.Fragment>
-    );
-  }
+  const guestLink = (
+    <ul className="navbar-nav mt-2 ">
+      <li className="nav-item ml-2">
+        <Link to="/login">Login</Link>
+      </li>
+      <li className="nav-item ml-2">
+        <Link to="/register">Register</Link>
+      </li>
+    </ul>
+  );
+
+  return (
+    <React.Fragment>
+      <nav className="navbar navbar-expand-sm  bg-white shadow">
+        <a className="navbar-brand" href="#">
+          Mylists
+        </a>
+        <div className="text-center">
+          {!auth.isAuthenticated && (
+            <span className="text-secondary ">Login to add leads</span>
+          )}
+        </div>
+
+        <div className=" ml-auto">
+          {auth.isAuthenticated ? authenticatedLink : guestLink}
+        </div>
+      </nav>
+    </React.Fragment>
+  );
 }
 
-export default Header;
+const mapStateToProps = (state) => {
+  return {
+    auth: state.auth,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    logout: () => dispatch(logout()),
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(Header);

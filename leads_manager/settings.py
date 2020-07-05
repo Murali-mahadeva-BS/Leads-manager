@@ -29,8 +29,17 @@ INSTALLED_APPS = [
 
     'leads.apps.LeadsConfig',  # leads app
     'frontend.apps.FrontendConfig',  # frontend app that holds react
-    'rest_framework',  # rest framework
+    'accounts.apps.AccountsConfig',
+
+
+    # third party packages
+    'rest_framework',  # rest framework api
+    'knox',  # for authentication
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication',)
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

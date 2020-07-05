@@ -1,45 +1,60 @@
-import React, { Component } from "react";
+import React, { useEffect } from "react";
+import { fetchLeads, deleteLead } from "../../redux/actions";
 import { connect } from "react-redux";
-import PropTypes from "prop-types";
-import { getLeads } from "../../actions/leads";
 
-class Leads extends Component {
-  static propTypes = {
-    leads: PropTypes.array.isRequired,
-    getLeads: PropTypes.func.isRequired,
-  };
+function Leads({ leads, fetchLeads, deleteLead }) {
+  useEffect(() => {
+    fetchLeads();
+  }, []);
 
-  componentDidMount() {
-    this.props.getLeads();
-  }
-  render() {
-    return (
-      <React.Fragment>
-        <h1>Leads lists</h1>
-        <table className="table table-striped">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Message</th>
-              <th />
+  return (
+    <React.Fragment>
+      <h2>Leads</h2>
+      {/* <p>{JSON.stringify(leads.leads)}</p> */}
+
+      <table className="table table-striped">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Message</th>
+            <th />
+          </tr>
+        </thead>
+        <tbody>
+          {leads.leads.map(({ id, name, email, message }) => (
+            <tr key={id}>
+              <td>{id}</td>
+              <td>{name}</td>
+              <td>{email}</td>
+              <td>{message}</td>
+              <td>
+                <button
+                  onClick={() => deleteLead(id)}
+                  className="btn btn-danger btn-sm"
+                >
+                  Delete
+                </button>
+              </td>
             </tr>
-          </thead>
-
-          <tbody>
-            {this.props.leads.map((lead) => {
-              <tr key={lead.id}>'hello'</tr>;
-            })}
-          </tbody>
-        </table>
-      </React.Fragment>
-    );
-  }
+          ))}
+        </tbody>
+      </table>
+    </React.Fragment>
+  );
 }
 
 const mapStateToProps = (state) => {
-  leads: state.leads.leads;
+  return {
+    leads: state.leads,
+  };
 };
 
-export default connect(mapStateToProps, { getLeads })(Leads);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchLeads: () => dispatch(fetchLeads()),
+    deleteLead: (id) => dispatch(deleteLead(id)),
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(Leads);
